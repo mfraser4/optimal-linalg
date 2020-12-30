@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
+option(ENABLE_TESTS "Enable tests" OFF)
+
 message("\nStarted CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 
 #
@@ -17,10 +19,6 @@ message("\nStarted CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 #
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n")
-endif()
-
-if(${PROJECT_NAME}_ENABLE_DEBUG)
-    add_compile_definitions(OPTIMAL_LINALG_DEBUG)
 endif()
 
 #
@@ -44,7 +42,7 @@ add_library(
 #
 # Build tests if configured
 #
-if(${PROJECT_NAME}_ENABLE_UNIT_TESTING)
+if(${ENABLE_TESTS})
     enable_testing()
     message("Building unit tests.\n")
     add_subdirectory(${CMAKE_SOURCE_DIR}/test)
