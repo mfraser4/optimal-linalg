@@ -31,8 +31,14 @@ static_assert(v1 != v3, "linalg::Vector::operator!= should be constexpr");
 static_assert((v1 * v3) == v4, "linalg::Vector::operator* should be constexpr");
 
 // 2x2 matrices
-constexpr float b1[2][2] = { {1.0f, 2.0f}, {3.0f, 4.0f} };
-constexpr float b2[2][2] = { {2.0f, 4.0f}, {6.0f, 8.0f} };
+constexpr float b1[2][2] = {
+	{1.0f, 2.0f},
+	{3.0f, 4.0f}
+};
+constexpr float b2[2][2] = {
+	{2.0f, 4.0f},
+	{6.0f, 8.0f}
+};
 
 constexpr Matrix<float, 2, 2> m5(b1);
 constexpr Matrix<float, 2, 2> m6(b2);
@@ -51,21 +57,18 @@ static_assert(v5 != v6, "linalg::Vector::operator!= should be constexpr");
 static_assert((2.0f * v5) == v6, "linalg::Vector::operator* and operator== should be constexpr");
 
 // MxN matrix times NxP matrix
-constexpr double d1[3][2] =
-{
+constexpr double d1[3][2] = {
 	{1.0, 2.0},
 	{3.0, 4.0},
 	{5.0, 6.0},
 };
 
-constexpr double d2[2][4] =
-{
+constexpr double d2[2][4] = {
 	{8.0,  9.0,  10.0, 11.0},
 	{12.0, 13.0, 14.0, 15.0},
 };
 
-constexpr double d3[3][4] =
-{
+constexpr double d3[3][4] = {
 	{32.0,  35.0,  38.0,  41.0},
 	{72.0,  79.0,  86.0,  93.0},
 	{112.0, 123.0, 134.0, 145.0},
@@ -80,4 +83,35 @@ static_assert((m7 * m8) == m9, "linalg::Matrix::operator* should be constexpr");
 // Mx1 matrices and vectors should be checkable for equivalence
 static_assert(Matrix<float, 2, 1>(c1) == Vector<float, 2>(c1));
 
-// TODO: check that matrix value can be changed at runtime
+// Dot product
+static_assert(dot(m1, m2) == 16, "linalg::dot should be constexpr");
+static_assert(dot(v5, v6) == 10.0f, "linalg::dot should be constexpr");
+static_assert(dot(m5, m6) == 60.0f, "linalg::dot should be constexpr");
+
+// Sum
+static_assert(sum(m7) == 21.0f, "linalg::sum should be constexpr");
+static_assert(sum(v5) == 3.0f, "linalg::sum should be constexpr and accept Vector");
+
+// Diag
+constexpr int e1[4] = {1, 2, 3, 4};
+constexpr auto m10 = diag<int, 4>(e1);
+
+static_assert(m10[0][0] == 1);
+static_assert(m10[0][1] == 0);
+static_assert(m10[0][2] == 0);
+static_assert(m10[0][3] == 0);
+
+static_assert(m10[1][0] == 0);
+static_assert(m10[1][1] == 2);
+static_assert(m10[1][2] == 0);
+static_assert(m10[1][3] == 0);
+
+static_assert(m10[2][0] == 0);
+static_assert(m10[2][1] == 0);
+static_assert(m10[2][2] == 3);
+static_assert(m10[2][3] == 0);
+
+static_assert(m10[3][0] == 0);
+static_assert(m10[3][1] == 0);
+static_assert(m10[3][2] == 0);
+static_assert(m10[3][3] == 4);
